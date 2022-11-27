@@ -1,6 +1,3 @@
-import { Router } from "express";
-const router = Router();
-
 import { Todo } from "../models/todo";
 
 const todos: Todo[] = [];
@@ -8,13 +5,16 @@ const todos: Todo[] = [];
 type RequestBody = { text: string };
 type RequestParams = { todoId: string };
 
-// Get all todos
-router.get("/", (req, res, next) => {
-  res.status(200).json({ todos: todos });
-});
+// Get todos =======================================================================
 
-// Add todos
-router.post("/todo", (req, res, next) => {
+export const getTodos = (req: any, res: any, next: any) => {
+  res.status(200).json({ todos: todos });
+};
+
+// Add Todo ========================================================================
+
+// Adding todo
+export const addTodo = (req: any, res: any, next: any) => {
   const body = req.body as RequestBody;
 
   const newTodo: Todo = {
@@ -30,10 +30,11 @@ router.post("/todo", (req, res, next) => {
     todo: newTodo,
     todos: todos,
   });
-});
+};
 
-// Replace todos
-router.put("/todo/:todoId", (req, res, next) => {
+// Update Todo =====================================================================
+
+export const updatedTodo = (req: any, res: any, next: any) => {
   const params = req.params as RequestParams;
   const tid = params.todoId;
 
@@ -47,10 +48,11 @@ router.put("/todo/:todoId", (req, res, next) => {
   todos[todoIndex] = { id: todos[todoIndex].id, text: body.text };
 
   return res.status(200).json({ message: "Updated todo", todo: todos });
-});
+};
 
-// Deleting todos
-router.delete("/todo/:todoId", (req, res, next) => {
+// Delete Todo ======================================================================
+
+export const deleteTodo = (req: any, res: any, next: any) => {
   const params = req.params as RequestParams;
   const tid = params.todoId;
 
@@ -62,6 +64,4 @@ router.delete("/todo/:todoId", (req, res, next) => {
   todos.splice(todoIndex, 1);
 
   return res.status(200).json({ message: "Todo was deleted!", todos: todos });
-});
-
-export default router;
+};
